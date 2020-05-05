@@ -1,0 +1,40 @@
+#!/bin/bash
+#
+# Compare snap contents between channels
+
+usage ()
+{
+  echo "usage: $0 SNAP CHANNEL CHANNEL"
+  exit 1
+}
+
+if [ $# -ne 3 ];
+then
+  usage
+fi
+
+snap=$1
+achannel=$2
+bchannel=$3
+
+dir=`mktemp -d`
+mkdir -p $dir/out
+echo $dir
+
+snap download --channel=$achannel --basename=achannel --target-directory=$dir $snap > /dev/null
+snap download --channel=$bchannel --basename=bchannel --target-directory=$dir $snap > /dev/null
+
+unsquashfs -d $dir/out/$achannel $dir/achannel.snap > /dev/null
+unsquashfs -d $dir/out/$bchannel $dir/bchannel.snap > /dev/null
+
+cd $dir/out/$achannel
+find . | sort -u > $dir/$achannel
+cd $dir/out/$bchannel
+find . | sort -u > $dir/$bchannel
+
+cd $dir
+diff -u0 $achannel $bchannel | grep -v @@
+cd $PWD
+
+# Cleanup
+rm -rf $dir

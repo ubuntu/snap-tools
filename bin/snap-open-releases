@@ -1,0 +1,3 @@
+#!/bin/bash
+
+xdg-open https://snapcraft.io/$1/releases

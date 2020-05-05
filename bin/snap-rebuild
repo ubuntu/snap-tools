@@ -1,0 +1,12 @@
+#!/bin/bash
+
+arches="amd64 armhf arm64 i386"
+snap=$1
+
+for arch in $arches;
+do
+  lp-build-snap --lpname ubuntu-desktop \
+	  --arch $arch --series bionic \
+	  --core-channel stable \
+	  --snapcraft-channel candidate $snap
+done
