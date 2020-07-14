@@ -3,9 +3,17 @@
 arches="amd64 armhf arm64 i386"
 snap=$1
 
+if [ -z "$2" ]
+  then
+    lpname=desktop-snappers
+  else
+    lpname=$2
+fi
+
+
 for arch in $arches;
 do
-  lp-build-snap --lpname ubuntu-desktop \
+  lp-build-snap --lpname $lpname \
 	  --arch $arch --series bionic \
 	  --core-channel stable \
 	  --snapcraft-channel candidate $snap
