@@ -1,0 +1,20 @@
+{
+  "snaps": [
+    {
+      "snap": "gnome-calculator",
+      "windowclass": "gnome-calculator"
+    },
+    {
+      "snap": "gnome-2048",
+      "windowclass": "gnome-2048"
+    },
+    {
+      "snap": "code",
+      "windowclass": "code"
+    },
+    {
+      "snap": "quadrapassel",
+      "windowclass": "quadrapassel"
+    }
+  ]
+}

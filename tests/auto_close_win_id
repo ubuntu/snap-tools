@@ -1,0 +1,17 @@
+#!/bin/bash
+
+usage ()
+{
+  echo "usage: $0 WINDOW_CLASS"
+  exit 1
+}
+
+if [ $# -ne 1 ];
+then
+  usage
+fi
+
+id=$1
+#for w in `xdotool search --sync --onlyvisible --class "$id"`; do xdotool windowclose $w;done
+for w in `xdotool search --sync --onlyvisible --class "$id"`;do xdotool getwindowpid $w | xargs kill; done
+
