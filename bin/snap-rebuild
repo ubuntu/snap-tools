@@ -1,6 +1,5 @@
 #!/bin/bash
 
-arches="amd64 armhf arm64 i386"
 snap=$1
 
 if [ -z "$2" ]
@@ -11,10 +10,6 @@ if [ -z "$2" ]
 fi
 
 
-for arch in $arches;
-do
-  lp-build-snap --lpname $lpname \
-	  --arch $arch --series bionic \
+lp-build-snap --lpname $lpname \
 	  --core-channel stable \
-	  --snapcraft-channel candidate $snap
-done
+	  --snapcraft-channel stable $snap
