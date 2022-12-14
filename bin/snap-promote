@@ -1,0 +1,56 @@
+#!/bin/bash
+#
+# Promote snap, using progressive for amd64
+
+LC_ALL=C
+LANG=
+LANGUAGE=
+
+usage ()
+{
+  echo "usage: $0 SNAP FROM_CHANNEL TO_CHANNEL"
+  exit 1
+}
+
+if [ $# -ne 3 ];
+then
+  usage
+fi
+
+snap=$1
+fromchannel=$2
+tochannel=$3
+
+for arch in amd64 arm64 armhf;
+do
+  newrev=$(snapcraft status --arch "$arch" "$snap" | grep "$fromchannel" | sed 's/latest//g' | sed s/$arch//g | awk '{print $3}')
+  if [ $? -ne 0 ]
+  then
+    echo "No revision found for $arch of $snap on the $fromchannel"
+    continue
+  fi
+
+  oldrev=$(snapcraft status --arch "$arch" "$snap" | grep "$tochannel" | sed 's/latest//g' | sed s/$arch//g | awk '{print $3}')
+  if [ $? -ne 0 ]
+  then
+    echo "No revision found for $arch of $snap on the $tochannel"
+    continue
+  fi
+
+  echo "$newrev $oldrev"
+
+  if [ "$newrev" == "$oldrev" ];
+  then
+    echo "No new revision found for $arch of $snap"
+    continue
+  fi
+
+  if [ $arch == "amd64" ];
+  then
+    echo "AMD64 $newrev"
+    echo "snapcraft release --progressive 15 $snap $newrev $tochannel"
+  else
+    echo "$arch $newrev"
+    echo "snapcraft release $snap $newrev $tochannel"
+  fi
+done
