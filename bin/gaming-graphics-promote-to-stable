@@ -1,0 +1,5 @@
+#!/bin/bash
+
+for track in oibaf-latest kisak-fresh kisak-turtle; do
+  snapcraft promote --from-channel $track/candidate --to-channel $track/stable gaming-graphics-core22
+done
